@@ -4,45 +4,52 @@ fun readFileAsLines(name: String) = readFile(name).lines()
 
 data class Point2D(val x: Int, val y: Int)
 
-fun Point2D.surroundingPoints() = listOf(
-    copy(x = x + 1), copy(x = x - 1), copy(y = y + 1), copy(y = y - 1)
-)
+//fun Point2D.surroundingPoints() = listOf(
+//    copy(x = x + 1), copy(x = x - 1), copy(y = y + 1), copy(y = y - 1)
+//)
 
 operator fun Point2D.plus(direction: Direction) =
     when (direction) {
         Direction.NORTH -> copy(y = y - 1)
+        Direction.NORTH_EAST -> copy(x = x + 1, y = y - 1)
         Direction.EAST -> copy(x = x + 1)
+        Direction.SOUTH_EAST -> copy(x = x + 1, y = y + 1)
         Direction.SOUTH -> copy(y = y + 1)
+        Direction.SOUTH_WEST -> copy(x = x - 1, y = y + 1)
         Direction.WEST -> copy(x = x - 1)
+        Direction.NORTH_WEST -> copy(x = x - 1, y = y - 1)
     }
 
-enum class Direction { NORTH, EAST, SOUTH, WEST }
+enum class Direction { NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST }
 
-fun Direction.perpendicularFrom() =
-    when (this) {
-        Direction.NORTH -> listOf(Direction.WEST, Direction.EAST)
-        Direction.SOUTH -> listOf(Direction.EAST, Direction.WEST)
-        Direction.EAST -> listOf(Direction.NORTH, Direction.SOUTH)
-        Direction.WEST -> listOf(Direction.SOUTH, Direction.NORTH)
-    }
+//fun Direction.perpendicularFrom() =
+//    when (this) {
+//        Direction.NORTH -> listOf(Direction.WEST, Direction.EAST)
+//        Direction.SOUTH -> listOf(Direction.EAST, Direction.WEST)
+//        Direction.EAST -> listOf(Direction.NORTH, Direction.SOUTH)
+//        Direction.WEST -> listOf(Direction.SOUTH, Direction.NORTH)
+//    }
 
-fun Direction.opposite() =
-    when (this) {
-        Direction.NORTH -> Direction.SOUTH
-        Direction.EAST -> Direction.WEST
-        Direction.SOUTH -> Direction.NORTH
-        Direction.WEST -> Direction.EAST
-    }
+//fun Direction.opposite() =
+//    when (this) {
+//        Direction.NORTH -> Direction.SOUTH
+//        Direction.EAST -> Direction.WEST
+//        Direction.SOUTH -> Direction.NORTH
+//        Direction.WEST -> Direction.EAST
+//    }
 
 class Grid<T>(private val points: Map<Point2D, T>) : Map<Point2D, T> by points {
     val highestX = points.keys.maxOf { it.x }
     val highestY = points.keys.maxOf { it.y }
 
+    fun valuesForPoints(point2Ds: List<Point2D>, default: T?): List<T> =
+        point2Ds.mapNotNull { point2D -> points.getOrDefault(point2D, default) }
+
     fun point2DInGrid(point2D: Point2D) =
         point2D.x in 0..highestX && point2D.y in 0..highestY
 
-    fun getSurroundingPoints(point2D: Point2D, condition: (T) -> Boolean = { true }) =
-        point2D.surroundingPoints().filter { point2DInGrid(it) && condition(points[it]!!) }
+//    fun getSurroundingPoints(point2D: Point2D, condition: (T) -> Boolean = { true }) =
+//        point2D.surroundingPoints().filter { point2DInGrid(it) && condition(points[it]!!) }
 
     fun toStringWithOnly(restrictedPoints: Set<Point2D>) = buildString {
         for (y in 0..highestY) {
