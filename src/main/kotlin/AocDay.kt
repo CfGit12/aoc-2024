@@ -1,8 +1,8 @@
 abstract class AocDay<T>(private val day: Int) {
 
-    private val input: T = parse(readFile("$day.txt"))
     private val sampleInput: T = parse(readFile("$day-sample.txt"))
-
+    private val input: T = parse(readFile("$day.txt"))
+    
     abstract fun part1(input: T): Any
     abstract fun part2(input: T): Any
     abstract fun parse(inputStr: String): T

@@ -3,4 +3,5 @@ fun main() {
     Day2.execute()
     Day3.execute()
     Day4.execute()
+    Day5.execute()
 }
