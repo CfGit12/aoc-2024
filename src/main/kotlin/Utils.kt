@@ -10,17 +10,17 @@ data class Point2D(val x: Int, val y: Int)
 
 operator fun Point2D.plus(direction: Direction) =
     when (direction) {
-        Direction.NORTH -> copy(y = y - 1)
-        Direction.NORTH_EAST -> copy(x = x + 1, y = y - 1)
-        Direction.EAST -> copy(x = x + 1)
-        Direction.SOUTH_EAST -> copy(x = x + 1, y = y + 1)
-        Direction.SOUTH -> copy(y = y + 1)
-        Direction.SOUTH_WEST -> copy(x = x - 1, y = y + 1)
-        Direction.WEST -> copy(x = x - 1)
-        Direction.NORTH_WEST -> copy(x = x - 1, y = y - 1)
+        Direction.N -> copy(y = y - 1)
+        Direction.NE -> copy(x = x + 1, y = y - 1)
+        Direction.E -> copy(x = x + 1)
+        Direction.SE -> copy(x = x + 1, y = y + 1)
+        Direction.S -> copy(y = y + 1)
+        Direction.SW -> copy(x = x - 1, y = y + 1)
+        Direction.W -> copy(x = x - 1)
+        Direction.NW -> copy(x = x - 1, y = y - 1)
     }
 
-enum class Direction { NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST }
+enum class Direction { N, E, S, W, NE, SE, SW, NW }
 
 //fun Direction.perpendicularFrom() =
 //    when (this) {
@@ -41,6 +41,13 @@ enum class Direction { NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_W
 class Grid<T>(private val points: Map<Point2D, T>) : Map<Point2D, T> by points {
     val highestX = points.keys.maxOf { it.x }
     val highestY = points.keys.maxOf { it.y }
+
+    fun modifiedWithPoint(point2D: Point2D, value: T): Grid<T> {
+        return Grid(points + (point2D to value))
+    }
+
+    fun posOf(value: T): Point2D =
+        points.entries.first { it.value == value }.key
 
     fun valuesForPoints(point2Ds: List<Point2D>, default: T?): List<T> =
         point2Ds.mapNotNull { point2D -> points.getOrDefault(point2D, default) }
