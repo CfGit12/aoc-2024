@@ -127,3 +127,4 @@ fun List<String>.transposed(): List<String> {
 fun String.substringBetween(a: String, b: String) = substringAfter(a).substringBefore(b)
 
 fun List<String>.toInts() = map { it.toInt() }
+fun List<String>.toLongs() = map { it.toLong() }
