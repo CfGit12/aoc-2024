@@ -21,9 +21,9 @@ object Day7 : AocDay<TargetAndNumbersList>(7) {
                 return currentTotal == target
             }
             val next = remainingNumbers[0]
-            val l = calculation(currentTotal + next, remainingNumbers.drop(1))
-            val r = calculation(currentTotal * next, remainingNumbers.drop(1))
-            return l or r
+            if (calculation(currentTotal + next, remainingNumbers.drop(1))) return true
+            if (calculation(currentTotal * next, remainingNumbers.drop(1))) return true
+            return false
         }
 
         return calculation(numbers[0], numbers.drop(1))
@@ -33,14 +33,15 @@ object Day7 : AocDay<TargetAndNumbersList>(7) {
         val (target, numbers) = targetAndNumbers
 
         fun calculation(currentTotal: Long, remainingNumbers: List<Long>): Boolean {
+            if (currentTotal > target) return false
             if (remainingNumbers.isEmpty()) {
                 return currentTotal == target
             }
             val next = remainingNumbers[0]
-            val l = calculation(currentTotal + next, remainingNumbers.drop(1))
-            val m = calculation("$currentTotal$next".toLong(), remainingNumbers.drop(1))
-            val r = calculation(currentTotal * next, remainingNumbers.drop(1))
-            return l or m or r
+            if (calculation(currentTotal + next, remainingNumbers.drop(1))) return true
+            if (calculation("$currentTotal$next".toLong(), remainingNumbers.drop(1))) return true
+            if (calculation(currentTotal * next, remainingNumbers.drop(1))) return true
+            return false
         }
 
         return calculation(numbers[0], numbers.drop(1))

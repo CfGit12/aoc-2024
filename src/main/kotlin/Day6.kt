@@ -1,58 +1,25 @@
 object Day6 : AocDay<Grid<Char>>(6) {
 
-    override fun part1(grid: Grid<Char>): Any {
+    override fun part1(grid: Grid<Char>) =
+        walk(grid).first.size
+
+    override fun part2(grid: Grid<Char>) =
+        walk(grid).first
+            .filterNot { it == grid.posOf('^') }
+            .count { walk(grid.modifiedWithPoint(it, '#')).second }
+
+    fun walk(grid: Grid<Char>): Pair<Set<Point2D>, Boolean> {
         var position = grid.posOf('^')
         var direction = Direction.N
-        var ahead = grid[position + direction]
-        var visited = mutableSetOf(position)
-        while (ahead != null) {
-            if (ahead == '#') {
-                direction = direction.rotate90()
-                ahead = grid[position + direction]
-                continue
-            }
-            position = position + direction
-            visited.add(position)
-            ahead = grid[position + direction]
-        }
-        return visited.size
-    }
-
-    override fun part2(grid: Grid<Char>): Any {
-        val possibleObstacles = buildSet {
-            for (x in 0..grid.highestX) {
-                for (y in 0..grid.highestY) {
-                    add(Point2D(x, y))
-                }
-            }
-            remove(grid.posOf('^'))
-        }
-        return possibleObstacles.count { containsALoop(grid.modifiedWithPoint(it, '#')) }
-    }
-
-    fun containsALoop(grid: Grid<Char>): Boolean {
-        var position = grid.posOf('^')
-        var direction = Direction.N
-        var ahead = grid[position + direction]
         var visited = mutableSetOf<Pair<Point2D, Direction>>()
-        var looped = false
-        while (ahead != null) {
-            //println(position to direction)
-            if ((position to direction) in visited) {
-                looped = true
-                break
-            }
-            if (ahead == '#') {
-                direction = direction.rotate90()
-                ahead = grid[position + direction]
-                continue
-            }
-            visited.add(position to direction)
-            position = position + direction
-            ahead = grid[position + direction]
+        while (grid[position] != null && (position to direction !in visited)) {
+            visited += position to direction
+            val ahead = position + direction
+
+            if (grid[ahead] == '#') direction = direction.rotate90()
+            else position = ahead
         }
-        //println("returning $looped")
-        return looped
+        return visited.map { it.first }.toSet() to (grid[position] != null)
     }
 
     fun Direction.rotate90() = when (this) {
