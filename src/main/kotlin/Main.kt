@@ -8,4 +8,5 @@ fun main() {
     //Day7.execute()
     Day8.execute()
     Day9.execute()
+    Day10.execute()
 }

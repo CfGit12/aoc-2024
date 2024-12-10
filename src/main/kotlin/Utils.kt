@@ -4,9 +4,9 @@ fun readFileAsLines(name: String) = readFile(name).lines()
 
 data class Point2D(val x: Int, val y: Int)
 
-//fun Point2D.surroundingPoints() = listOf(
-//    copy(x = x + 1), copy(x = x - 1), copy(y = y + 1), copy(y = y - 1)
-//)
+fun Point2D.surroundingPoints() = listOf(
+    copy(x = x + 1), copy(x = x - 1), copy(y = y + 1), copy(y = y - 1)
+)
 
 operator fun Point2D.plus(direction: Direction) =
     when (direction) {
@@ -55,8 +55,8 @@ class Grid<T>(private val points: Map<Point2D, T>) : Map<Point2D, T> by points {
     fun point2DInGrid(point2D: Point2D) =
         point2D.x in 0..highestX && point2D.y in 0..highestY
 
-//    fun getSurroundingPoints(point2D: Point2D, condition: (T) -> Boolean = { true }) =
-//        point2D.surroundingPoints().filter { point2DInGrid(it) && condition(points[it]!!) }
+    fun getSurroundingPoints(point2D: Point2D, condition: (T) -> Boolean = { true }) =
+        point2D.surroundingPoints().filter { point2DInGrid(it) && condition(points[it]!!) }
 
     fun toStringWithOnly(restrictedPoints: Set<Point2D>) = buildString {
         for (y in 0..highestY) {
