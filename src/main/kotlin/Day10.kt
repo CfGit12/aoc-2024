@@ -38,7 +38,7 @@ object Day10 : AocDay<Grid<Int>>(10) {
 
             val surroundingPoints = grid.getSurroundingPoints(point2D) { it == height + 1 }
 
-            if (surroundingPoints.isEmpty()) return 0
+            //if (surroundingPoints.isEmpty()) return 0
 
             val score = surroundingPoints.sumOf { calculateScore(it) }
 
